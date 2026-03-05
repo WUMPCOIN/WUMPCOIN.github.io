@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$WUMP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=gg+sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    --blurple: #5865F2;
+    --blurple-dark: #4752C4;
+    --blurple-light: #7289DA;
+    --blurple-glow: rgba(88, 101, 242, 0.4);
+    --dark-bg: #0e1117;
+    --dark-card: #1a1d2e;
+    --dark-card2: #1e2235;
+    --dark-border: #2a2d4a;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B9BBBE;
+    --text-muted: #72767D;
+    --green: #57F287;
+    --yellow: #FEE75C;
+    --red: #ED4245;
+    --font: 'Nunito', -apple-system, BlinkMacSystemFont, 'gg sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: var(--font);
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(88,101,242,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(114,137,218,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 10%, rgba(88,101,242,0.06) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1.05) rotate(2deg); }
+  }
+
+  /* NAVBAR */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(14, 17, 23, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(88,101,242,0.15);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 900;
+    color: white;
+    text-decoration: none;
+  }
+
+  .nav-logo .coin-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 16px var(--blurple-glow);
+    animation: coinSpin 6s linear infinite;
+    flex-shrink: 0;
+  }
+
+  .nav-logo .coin-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @keyframes coinSpin {
+    0%, 100% { transform: rotateY(0deg); box-shadow: 0 0 16px var(--blurple-glow); }
+    50% { transform: rotateY(180deg); box-shadow: 0 0 32px rgba(88,101,242,0.7); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: white; }
+
+  .nav-cta {
+    background: var(--blurple);
+    color: white !important;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 700 !important;
+    transition: all 0.2s !important;
+  }
+
+  .nav-cta:hover {
+    background: var(--blurple-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px var(--blurple-glow);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(88,101,242,0.15);
+    border: 1px solid rgba(88,101,242,0.4);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blurple-light);
+    margin-bottom: 28px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero-badge .dot {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero-title .wump {
+    color: var(--blurple);
+    display: inline-block;
+    position: relative;
+    text-shadow: 0 0 60px rgba(88,101,242,0.6);
+    animation: fadeUp 0.7s 0.1s ease both, glow 3s 0.8s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 40px rgba(88,101,242,0.5); }
+    to { text-shadow: 0 0 80px rgba(88,101,242,0.9), 0 0 120px rgba(88,101,242,0.4); }
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: var(--text-secondary);
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 44px;
+    font-weight: 500;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.7s 0.3s ease both;
+    margin-bottom: 72px;
+  }
+
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--blurple);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 24px rgba(88,101,242,0.4);
+    font-family: var(--font);
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: var(--blurple-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(88,101,242,0.6);
+  }
+
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--dark-card);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    border: 1px solid var(--dark-border);
+    transition: all 0.2s;
+    cursor: pointer;
+    font-family: var(--font);
+  }
+
+  .btn-secondary:hover {
+    background: var(--dark-card2);
+    border-color: var(--blurple);
+    transform: translateY(-2px);
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 0;
+    background: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: 20px;
+    overflow: hidden;
+    animation: fadeUp 0.7s 0.4s ease both;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .stat-item {
+    flex: 1;
+    padding: 24px 28px;
+    text-align: center;
+    border-right: 1px solid var(--dark-border);
+    position: relative;
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    display: block;
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.blurple { color: var(--blurple-light); }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* HOW TO EARN */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--blurple-light);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 17px;
+    color: var(--text-secondary);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 60px;
+    font-weight: 500;
+  }
+
+  .earn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .earn-card {
+    background: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: 20px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .earn-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(88,101,242,0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .earn-card:hover {
+    border-color: rgba(88,101,242,0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(88,101,242,0.15);
+  }
+
+  .earn-card:hover::before { opacity: 1; }
+
+  .earn-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    background: rgba(88,101,242,0.15);
+    border: 1px solid rgba(88,101,242,0.2);
+  }
+
+  .earn-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .earn-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .earn-reward {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(87,242,135,0.1);
+    border: 1px solid rgba(87,242,135,0.25);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--green);
+  }
+
+  /* LEADERBOARD */
+  .leaderboard-section {
+    background: var(--dark-card);
+    border-top: 1px solid var(--dark-border);
+    border-bottom: 1px solid var(--dark-border);
+    padding: 100px 0;
+  }
+
+  .leaderboard-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .leaderboard-table {
+    background: var(--dark-bg);
+    border: 1px solid var(--dark-border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .leaderboard-header {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto;
+    gap: 12px;
+    padding: 16px 24px;
+    background: rgba(88,101,242,0.08);
+    border-bottom: 1px solid var(--dark-border);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+  }
+
+  .leaderboard-row {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto;
+    gap: 12px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--dark-border);
+    align-items: center;
+    transition: background 0.2s;
+  }
+
+  .leaderboard-row:last-child { border-bottom: none; }
+  .leaderboard-row:hover { background: rgba(88,101,242,0.05); }
+
+  .rank {
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .rank.gold { color: #FFD700; }
+  .rank.silver { color: #C0C0C0; }
+  .rank.bronze { color: #CD7F32; }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .username { font-weight: 700; font-size: 14px; }
+  .user-tag { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+  .wump-amount {
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--blurple-light);
+  }
+
+  .wump-change {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    text-align: right;
+  }
+
+  /* TIERS */
+  .tiers-section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .tier-card {
+    border-radius: 20px;
+    padding: 32px 24px;
+    text-align: center;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .tier-card:hover { transform: translateY(-4px); }
+
+  .tier-card.bronze { background: rgba(205,127,50,0.08); border-color: rgba(205,127,50,0.3); }
+  .tier-card.silver { background: rgba(192,192,192,0.08); border-color: rgba(192,192,192,0.3); }
+  .tier-card.gold { background: rgba(255,215,0,0.08); border-color: rgba(255,215,0,0.3); }
+  .tier-card.diamond { background: rgba(88,101,242,0.12); border-color: rgba(88,101,242,0.5); }
+  .tier-card.wumpus { background: rgba(87,242,135,0.08); border-color: rgba(87,242,135,0.35); }
+
+  .tier-emoji { font-size: 40px; margin-bottom: 12px; display: block; }
+  .tier-name { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+  .tier-card.bronze .tier-name { color: #CD7F32; }
+  .tier-card.silver .tier-name { color: #C0C0C0; }
+  .tier-card.gold .tier-name { color: #FFD700; }
+  .tier-card.diamond .tier-name { color: var(--blurple-light); }
+  .tier-card.wumpus .tier-name { color: var(--green); }
+
+  .tier-req {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .tier-perk {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 500;
+  }
+
+  /* TOKENOMICS */
+  .token-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .token-card {
+    background: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .token-card.wide {
+    grid-column: 1 / -1;
+  }
+
+  .token-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .token-big {
+    font-size: 36px;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+  }
+
+  .token-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .dist-bar {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 14px;
+    margin: 16px 0 12px;
+    gap: 2px;
+  }
+
+  .dist-seg {
+    height: 100%;
+    border-radius: 4px;
+    transition: filter 0.2s;
+  }
+  .dist-seg:hover { filter: brightness(1.3); }
+
+  .dist-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    background: rgba(88,101,242,0.08);
+    border-top: 1px solid rgba(88,101,242,0.2);
+    border-bottom: 1px solid rgba(88,101,242,0.2);
+    padding: 12px 0;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 48px;
+    animation: ticker 30s linear infinite;
+    width: max-content;
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  .ticker-item .up { color: var(--green); }
+  .ticker-item .down { color: var(--red); }
+  .ticker-item .dot { color: var(--blurple); font-size: 18px; }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: var(--dark-card);
+    border-top: 1px solid var(--dark-border);
+    padding: 60px 48px 40px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--blurple);
+    margin-bottom: 8px;
+  }
+
+  .footer-tagline {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 32px;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--blurple-light); }
+
+  .footer-disclaimer {
+    font-size: 12px;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+    padding-top: 24px;
+    border-top: 1px solid var(--dark-border);
+  }
+
+  /* PRICE TICKER TOP */
+  .price-ticker {
+    position: fixed;
+    top: 73px;
+    left: 0; right: 0;
+    z-index: 99;
+  }
+
+  /* WUMPUS mascot float */
+  .mascot-float {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 120px;
+    opacity: 0.12;
+    pointer-events: none;
+    animation: float 4s ease-in-out infinite;
+    user-select: none;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+    50% { transform: translateY(calc(-50% - 20px)) rotate(5deg); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .leaderboard-inner { grid-template-columns: 1fr; gap: 40px; padding: 0 24px; }
+    .token-grid { grid-template-columns: 1fr; }
+    .token-card.wide { grid-column: auto; }
+    .stats-bar { flex-direction: column; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--dark-border); }
+    .stat-item:last-child { border-bottom: none; }
+    .mascot-float { display: none; }
+    footer { padding: 40px 24px 28px; }
+  }
+
+  /* ─── AUTH LOADING OVERLAY ─── */
+  #auth-loading {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(14,17,23,0.95);
+    backdrop-filter: blur(12px);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  #auth-loading.show { display: flex; }
+  .auth-spinner {
+    width: 48px; height: 48px;
+    border: 3px solid rgba(88,101,242,0.2);
+    border-top-color: var(--blurple);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .auth-loading-text { color: var(--text-secondary); font-weight: 600; font-size: 16px; }
+
+  /* ─── TOAST ─── */
+  #toast-container {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--dark-card2);
+    border: 1px solid var(--dark-border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 260px;
+    animation: toastIn 0.3s ease both;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    pointer-events: all;
+  }
+  .toast.reward { border-color: rgba(87,242,135,0.4); }
+  .toast-icon { font-size: 22px; }
+  .toast-title { font-weight: 800; font-size: 14px; color: var(--text-primary); }
+  .toast-sub { font-size: 12px; color: var(--text-secondary); }
+  .toast-wump { font-weight: 900; color: var(--green); font-size: 15px; margin-left: auto; white-space: nowrap; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ─── DASHBOARD SECTION ─── */
+  #dashboard {
+    display: none;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 110px 48px 60px;
+  }
+  #dashboard.show { display: block; }
+
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .dash-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .dash-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .dash-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 3px solid var(--blurple);
+    box-shadow: 0 0 20px var(--blurple-glow);
+    object-fit: cover;
+    display: block;
+    background: var(--dark-card);
+  }
+
+  .dash-avatar-status {
+    position: absolute;
+    bottom: 2px; right: 2px;
+    width: 14px; height: 14px;
+    background: var(--green);
+    border-radius: 50%;
+    border: 2px solid var(--dark-bg);
+  }
+
+  .dash-username {
+    font-size: 24px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.2;
+  }
+  .dash-tag { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+  .dash-balance-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(87,242,135,0.1);
+    border: 1px solid rgba(87,242,135,0.3);
+    border-radius: 16px;
+    padding: 12px 24px;
+  }
+  .dash-balance-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .dash-balance-value { font-size: 32px; font-weight: 900; color: var(--green); line-height: 1; }
+  .dash-balance-ticker { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+
+  .dash-logout {
+    background: none;
+    border: 1px solid var(--dark-border);
+    color: var(--text-muted);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.2s;
+  }
+  .dash-logout:hover { border-color: var(--red); color: var(--red); }
+
+  /* Dash stats row */
+  .dash-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 768px) { .dash-stats { grid-template-columns: repeat(2,1fr); } }
+
+  .dash-stat-card {
+    background: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    text-align: center;
+  }
+  .dash-stat-val { font-size: 26px; font-weight: 900; color: white; display: block; }
+  .dash-stat-val.green { color: var(--green); }
+  .dash-stat-val.blurple { color: var(--blurple-light); }
+  .dash-stat-val.yellow { color: var(--yellow); }
+  .dash-stat-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: block; }
+
+  /* Tasks */
+  .dash-section-title {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dash-section-title span { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .task-card {
+    background: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .task-card:hover:not(.done) { border-color: rgba(88,101,242,0.5); transform: translateY(-2px); }
+  .task-card.done { opacity: 0.5; }
+  .task-card.done .task-claim { background: var(--dark-card2); color: var(--text-muted); cursor: default; }
+
+  .task-icon-wrap {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(88,101,242,0.12);
+    border: 1px solid rgba(88,101,242,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .task-card.done .task-icon-wrap { background: rgba(87,242,135,0.08); border-color: rgba(87,242,135,0.2); }
+
+  .task-info { flex: 1; min-width: 0; }
+  .task-name { font-size: 14px; font-weight: 800; color: white; margin-bottom: 3px; }
+  .task-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 500; }
+
+  .task-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .task-reward { font-size: 13px; font-weight: 900; color: var(--green); white-space: nowrap; }
+  .task-card.done .task-reward { color: var(--text-muted); }
+
+  .task-claim {
+    background: var(--blurple);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .task-claim:hover { background: var(--blurple-dark); }
+  .task-claim.done-btn { background: transparent; color: var(--green); padding: 0; font-size: 13px; }
+
+  /* Divider between dashboard and landing */
+  .dash-divider {
+    display: none;
+    border: none;
+    border-top: 1px solid var(--dark-border);
+    max-width: 1200px;
+    margin: 0 auto 0;
+  }
+  .dash-divider.show { display: block; }
+
+  /* Logged-in nav avatar */
+  .nav-user {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .nav-user.show { display: flex; }
+  .nav-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--blurple);
+    object-fit: cover;
+    background: var(--dark-card);
+  }
+  .nav-username { font-weight: 700; font-size: 14px; color: white; }
+</style>
+</head>
+<body>
+
+<!-- AUTH LOADING -->
+<div id="auth-loading">
+  <div class="auth-spinner"></div>
+  <div class="auth-loading-text" id="auth-loading-text">Connecting your Discord…</div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="coin-icon"><img src="logo.png" alt="$WUMP logo"></div>
+    $WUMP
+  </a>
+  <ul class="nav-links">
+    <li><a href="#earn">How to Earn</a></li>
+    <li><a href="#leaderboard">Leaderboard</a></li>
+    <li><a href="#tiers">Tiers</a></li>
+    <li><a href="#tokenomics">Tokenomics</a></li>
+    <li id="nav-login-li"><a href="#" class="nav-cta" id="nav-login-btn" onclick="startDiscordLogin(event)">Connect Discord</a></li>
+    <li id="nav-user-li" style="display:none">
+      <div class="nav-user show" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})">
+        <img class="nav-avatar" id="nav-avatar" src="" alt="avatar">
+        <span class="nav-username" id="nav-username"></span>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<!-- PRICE TICKER -->
+<div class="price-ticker">
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD (shown when logged in) -->
+<div id="dashboard">
+  <div class="dash-header">
+    <div class="dash-profile">
+      <div class="dash-avatar-wrap">
+        <img class="dash-avatar" id="dash-avatar" src="" alt="avatar">
+        <div class="dash-avatar-status"></div>
+      </div>
+      <div>
+        <div class="dash-username" id="dash-username">Loading…</div>
+        <div class="dash-tag" id="dash-tag"></div>
+      </div>
+    </div>
+    <div class="dash-balance-pill">
+      <div>
+        <div class="dash-balance-label">Your Balance</div>
+        <div class="dash-balance-value" id="dash-balance">0</div>
+        <div class="dash-balance-ticker">$WUMP</div>
+      </div>
+    </div>
+    <button class="dash-logout" onclick="logout()">Disconnect</button>
+  </div>
+
+  <div class="dash-stats">
+    <div class="dash-stat-card">
+      <span class="dash-stat-val blurple" id="stat-streak">0</span>
+      <span class="dash-stat-lbl">🔥 Login Streak</span>
+    </div>
+    <div class="dash-stat-card">
+      <span class="dash-stat-val green" id="stat-earned-today">0</span>
+      <span class="dash-stat-lbl">⚡ Earned Today</span>
+    </div>
+    <div class="dash-stat-card">
+      <span class="dash-stat-val yellow" id="stat-tasks-done">0</span>
+      <span class="dash-stat-lbl">✅ Tasks Done</span>
+    </div>
+    <div class="dash-stat-card">
+      <span class="dash-stat-val" id="stat-account-age">—</span>
+      <span class="dash-stat-lbl">📅 Account Age</span>
+    </div>
+  </div>
+
+  <div class="dash-section-title">
+    Tasks <span id="task-count-label"></span>
+  </div>
+  <div class="tasks-grid" id="tasks-grid">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<hr class="dash-divider" id="dash-divider">
+
+<!-- HERO -->
+<section class="hero" style="padding-top: 150px;">
+  <div class="mascot-float">👾</div>
+  
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Live on Discord
+  </div>
+  
+  <h1 class="hero-title">
+    Earn <span class="wump">$WUMP</span><br>just by being you
+  </h1>
+  
+  <p class="hero-sub">
+    The first cryptocurrency that rewards your Discord loyalty. 
+    Older account? More $WUMP. Daily logins, server activity, 
+    boosting — every action pays.
+  </p>
+  
+  <div class="hero-buttons">
+    <a href="#" class="btn-primary" id="hero-login-btn" onclick="startDiscordLogin(event)">
+      <svg width="20" height="20" viewBox="0 0 71 55" fill="none"><g clip-path="url(#a)"><path d="M60.105 4.898A58.55 58.55 0 0 0 45.653.5a40.802 40.802 0 0 0-1.797 3.692 54.147 54.147 0 0 0-16.219 0A41.58 41.58 0 0 0 25.84.5a58.484 58.484 0 0 0-14.451 4.397C1.61 18.734-1.01 32.88.316 46.827a58.77 58.77 0 0 0 17.909 9.054 42.594 42.594 0 0 0 3.681-5.995 38.347 38.347 0 0 1-5.794-2.797c.486-.356.962-.727 1.424-1.093 11.158 5.154 23.233 5.154 34.253 0 .462.366.938.737 1.424 1.093a38.303 38.303 0 0 1-5.794 2.797 42.594 42.594 0 0 0 3.681 5.995 58.719 58.719 0 0 0 17.91-9.054c1.47-15.393-2.428-29.423-10.909-41.929ZM23.725 38.258c-3.497 0-6.38-3.218-6.38-7.165 0-3.947 2.822-7.166 6.38-7.166 3.558 0 6.441 3.22 6.38 7.166.001 3.947-2.822 7.165-6.38 7.165Zm23.55 0c-3.497 0-6.38-3.218-6.38-7.165 0-3.947 2.822-7.166 6.38-7.166 3.558 0 6.441 3.22 6.38 7.166 0 3.947-2.822 7.165-6.38 7.165Z" fill="currentColor"/></g></svg>
+      Connect Discord
+    </a>
+    <a href="#earn" class="btn-secondary">
+      How to Earn ↓
+    </a>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-value">$0.0001</span>
+      <span class="stat-label">Current Price</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value green">+2.1%</span>
+      <span class="stat-label">24h Change</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">$420</span>
+      <span class="stat-label">Market Cap</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value blurple">2</span>
+      <span class="stat-label">Discord Holders</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">21B</span>
+      <span class="stat-label">Total Supply</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO EARN -->
+<section id="earn">
+  <span class="section-label">💰 Earning $WUMP</span>
+  <h2 class="section-title">Every Discord action<br>earns you crypto</h2>
+  <p class="section-desc">$WUMP rewards genuine Discord activity. No mining rigs. No staking. Just do what you already do.</p>
+
+  <div class="earn-grid">
+    <div class="earn-card">
+      <div class="earn-icon">🎂</div>
+      <div class="earn-title">Account Age Bonus</div>
+      <div class="earn-desc">Earn a one-time multiplier based on how long your Discord account has existed. Veteran users get a massive head start.</div>
+      <span class="earn-reward">+500 $WUMP per year of age</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">📅</div>
+      <div class="earn-title">Daily Login Streak</div>
+      <div class="earn-desc">Log in every day to build your streak. Miss a day and it resets. Longer streaks unlock exponential multipliers.</div>
+      <span class="earn-reward">+10 $WUMP/day (up to 5x)</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">🏠</div>
+      <div class="earn-title">Join Partner Servers</div>
+      <div class="earn-desc">Join any of our 500+ verified $WUMP partner servers for an instant one-time reward per server.</div>
+      <span class="earn-reward">+250 $WUMP per server</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">💬</div>
+      <div class="earn-title">Send Messages</div>
+      <div class="earn-desc">Active chatting earns $WUMP. Capped daily to prevent spam. Quality messages in verified servers earn bonus.</div>
+      <span class="earn-reward">+1 $WUMP per message (cap 50/day)</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">🚀</div>
+      <div class="earn-title">Server Boosts</div>
+      <div class="earn-desc">Boost any partner server with Nitro and receive a premium recurring reward for each active boost.</div>
+      <span class="earn-reward">+2,000 $WUMP/month per boost</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">📣</div>
+      <div class="earn-title">Refer Friends</div>
+      <div class="earn-desc">Share your referral link. Earn a percentage of everything your referrals earn — forever.</div>
+      <span class="earn-reward">+10% of referral earnings</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">🎙️</div>
+      <div class="earn-title">Voice Activity</div>
+      <div class="earn-desc">Hang out in voice channels and passively earn $WUMP for each minute spent talking with others.</div>
+      <span class="earn-reward">+2 $WUMP per minute (cap 200/day)</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">✅</div>
+      <div class="earn-title">Verified Phone</div>
+      <div class="earn-desc">Add a verified phone number to your Discord account for a one-time security bonus.</div>
+      <span class="earn-reward">+1,000 $WUMP one-time</span>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-icon">💎</div>
+      <div class="earn-title">Nitro Subscriber</div>
+      <div class="earn-desc">Active Nitro or Nitro Basic subscribers earn a monthly airdrop directly to their wallet.</div>
+      <span class="earn-reward">+5,000 $WUMP/month</span>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<div class="leaderboard-section" id="leaderboard">
+  <div class="leaderboard-inner">
+    <div>
+      <span class="section-label">🏆 Leaderboard</span>
+      <h2 class="section-title" style="max-width:400px">Top earners<br>this week</h2>
+      <p class="section-desc" style="margin-bottom: 0;">The most active Discord users rise to the top. Will you claim your spot?</p>
+    </div>
+    <div class="leaderboard-table">
+      <div class="leaderboard-header">
+        <span>#</span>
+        <span>User</span>
+        <span>$WUMP</span>
+        <span>+24h</span>
+      </div>
+      
+      <div class="leaderboard-row">
+        <span class="rank gold">🥇</span>
+        <div class="user-info">
+          <div class="avatar" style="background:#5865F2">J</div>
+          <div><div class="username">Jane Doe</div><div class="user-tag">#1234 · 2021</div></div>
+        </div>
+        <span class="wump-amount">1,200</span>
+        <span class="wump-change">+1,200</span>
+      </div>
+
+      <div class="leaderboard-row">
+        <span class="rank silver">🥈</span>
+        <div class="user-info">
+          <div class="avatar" style="background:#7289DA">J</div>
+          <div><div class="username">John Smith</div><div class="user-tag">#5678 · 2023</div></div>
+        </div>
+        <span class="wump-amount">850</span>
+        <span class="wump-change">+850</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIERS -->
+<section id="tiers" style="padding-bottom: 60px;">
+  <span class="section-label">⭐ Holder Tiers</span>
+  <h2 class="section-title">The more you hold,<br>the more you get</h2>
+  <p class="section-desc">Higher tiers unlock exclusive Discord perks, custom roles, and earning multipliers.</p>
+
+  <div class="tiers-grid">
+    <div class="tier-card bronze">
+      <span class="tier-emoji">🥉</span>
+      <div class="tier-name">Bronze</div>
+      <div class="tier-req">1,000 – 9,999 $WUMP</div>
+      <div class="tier-perk">Access to #wump-holders channel<br>1.1x earn multiplier<br>Bronze badge on profile</div>
+    </div>
+
+    <div class="tier-card silver">
+      <span class="tier-emoji">🥈</span>
+      <div class="tier-name">Silver</div>
+      <div class="tier-req">10,000 – 49,999 $WUMP</div>
+      <div class="tier-perk">Priority support tickets<br>1.25x earn multiplier<br>Silver role in Discord</div>
+    </div>
+
+    <div class="tier-card gold">
+      <span class="tier-emoji">🥇</span>
+      <div class="tier-name">Gold</div>
+      <div class="tier-req">50,000 – 199,999 $WUMP</div>
+      <div class="tier-perk">Monthly $WUMP airdrop<br>1.5x earn multiplier<br>Gold animated avatar ring</div>
+    </div>
+
+    <div class="tier-card diamond">
+      <span class="tier-emoji">💎</span>
+      <div class="tier-name">Diamond</div>
+      <div class="tier-req">200,000 – 999,999 $WUMP</div>
+      <div class="tier-perk">Exclusive Diamond server access<br>2x earn multiplier<br>Custom Discord sticker pack</div>
+    </div>
+
+    <div class="tier-card wumpus">
+      <span class="tier-emoji">👾</span>
+      <div class="tier-name">Wumpus</div>
+      <div class="tier-req">1,000,000+ $WUMP</div>
+      <div class="tier-perk">Governance voting rights<br>5x earn multiplier<br>IRL Discord merch drop</div>
+    </div>
+  </div>
+</section>
+
+<!-- TOKENOMICS -->
+<section id="tokenomics">
+  <span class="section-label">📊 Tokenomics</span>
+  <h2 class="section-title">Built for the long haul</h2>
+  <p class="section-desc">A fixed supply with a fair distribution model. No VC dumps. No team allocation cliff.</p>
+
+  <div class="token-grid">
+    <div class="token-card">
+      <div class="token-card-title">Total Supply</div>
+      <div class="token-big">21,000,000,000</div>
+      <div class="token-sub">$WUMP · Fixed forever</div>
+    </div>
+    <div class="token-card">
+      <div class="token-card-title">Current Circulating</div>
+      <div class="token-big">2,050</div>
+      <div class="token-sub">&lt;0.01% · Just launched</div>
+    </div>
+    <div class="token-card">
+      <div class="token-card-title">Current Price</div>
+      <div class="token-big" style="color: var(--blurple-light)">$0.0001</div>
+      <div class="token-sub">USD · Updated live</div>
+    </div>
+    <div class="token-card">
+      <div class="token-card-title">Market Cap</div>
+      <div class="token-big" style="color: var(--green)">$420</div>
+      <div class="token-sub">Fully diluted: $2.1M</div>
+    </div>
+    <div class="token-card wide">
+      <div class="token-card-title">Distribution Breakdown</div>
+      <div class="dist-bar">
+        <div class="dist-seg" style="width:40%; background:#5865F2;"></div>
+        <div class="dist-seg" style="width:20%; background:#57F287;"></div>
+        <div class="dist-seg" style="width:15%; background:#FEE75C;"></div>
+        <div class="dist-seg" style="width:15%; background:#7289DA;"></div>
+        <div class="dist-seg" style="width:10%; background:#ED4245;"></div>
+      </div>
+      <div class="dist-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#5865F2"></div>40% Activity Rewards</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#57F287"></div>20% Staking Pool</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#FEE75C"></div>15% Team (4yr vest)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7289DA"></div>15% Ecosystem Fund</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ED4245"></div>10% Liquidity</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">$WUMP</div>
+  <p class="footer-tagline">The currency of Discord culture.</p>
+  <div class="footer-links">
+    <a href="#">Whitepaper</a>
+    <a href="#">Discord Server</a>
+    <a href="#">CoinGecko</a>
+    <a href="#">DEX Trade</a>
+    <a href="#">Twitter / X</a>
+    <a href="#">Audit Report</a>
+    <a href="#">Terms</a>
+  </div>
+  <p class="footer-disclaimer">
+    $WUMP is a community meme token created for entertainment purposes. 
+    This is a mock-up and not a real financial product. Cryptocurrency involves 
+    risk — never invest more than you can afford to lose. $WUMP is not affiliated 
+    with or endorsed by Discord Inc.
+  </p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  CONFIG — update WORKER_URL after deploying the CF Worker
+// ═══════════════════════════════════════════════════
+const WORKER_URL = 'https://odd-wood-0bf3.tight-cherry-323c.workers.dev/';
+const DISCORD_OAUTH_URL = 'https://discord.com/oauth2/authorize?client_id=1478609139876888596&response_type=code&redirect_uri=https%3A%2F%2FWUMPCOIN.github.io&scope=identify+email';
+const DISCORD_EPOCH = 1420070400000n;
+
+// ═══════════════════════════════════════════════════
+//  TASK DEFINITIONS
+// ═══════════════════════════════════════════════════
+const TASKS = [
+  // Auto-granted on login
+  { id: 'welcome',        name: 'Welcome Bonus',        icon: '🎉', reward: 100,  desc: 'First time connecting your Discord account.',  auto: true },
+  { id: 'email_verified', name: 'Verified Email',        icon: '✉️', reward: 250,  desc: 'Your Discord email address is verified.',       auto: true },
+  { id: 'has_avatar',     name: 'Custom Avatar',         icon: '🖼️', reward: 100,  desc: 'You\'ve set a custom profile picture.',          auto: true },
+  { id: 'age_1yr',        name: 'OG Member',             icon: '⏰', reward: 500,  desc: 'Your account is over 1 year old.',               auto: true },
+  { id: 'age_3yr',        name: 'Discord Veteran',       icon: '🏆', reward: 1500, desc: 'Your account is over 3 years old.',              auto: true },
+  { id: 'age_5yr',        name: 'Discord Elder',         icon: '👑', reward: 5000, desc: 'Your account is over 5 years old.',              auto: true },
+  // Repeatable daily
+  { id: 'daily_login',    name: 'Daily Login',           icon: '📅', reward: 50,   desc: 'Claim 50 $WUMP once per day for logging in.',   daily: true },
+  // Streak bonuses (auto after daily check)
+  { id: 'streak_7',       name: '7-Day Streak 🔥',       icon: '🔥', reward: 500,  desc: 'Log in 7 days in a row.',                       streakReq: 7  },
+  { id: 'streak_30',      name: '30-Day Streak 🔥🔥',    icon: '🔥', reward: 3000, desc: 'Log in 30 days in a row.',                      streakReq: 30 },
+  // Manual claims (honour system — will need bot verification later)
+  { id: 'join_server',    name: 'Join Our Server',       icon: '🏠', reward: 200,  desc: 'Join the official $WUMP Discord server.',       manual: true, link: 'https://discord.gg/wumpcoin' },
+  { id: 'share_twitter',  name: 'Share on Twitter/X',   icon: '🐦', reward: 150,  desc: 'Tweet about $WUMP to spread the word.',         manual: true, link: 'https://twitter.com/intent/tweet?text=I+just+started+earning+%24WUMP+%E2%80%94+the+Discord+currency!+%F0%9F%8E%AE' },
+  { id: 'share_reddit',   name: 'Post on Reddit',        icon: '📣', reward: 150,  desc: 'Share $WUMP on a crypto subreddit.',            manual: true },
+];
+
+// ═══════════════════════════════════════════════════
+//  LOCAL STORAGE HELPERS
+// ═══════════════════════════════════════════════════
+const LS = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  del: k => localStorage.removeItem(k),
+};
+
+function getState() {
+  return LS.get('wump_state') || {
+    user: null,
+    access_token: null,
+    balance: 0,
+    tasks_done: {},     // { taskId: timestamp }
+    streak: 0,
+    last_login_date: null,
+    earned_today: 0,
+    last_earned_date: null,
+  };
+}
+function saveState(s) { LS.set('wump_state', s); }
+
+// ═══════════════════════════════════════════════════
+//  DISCORD SNOWFLAKE → DATE
+// ═══════════════════════════════════════════════════
+function snowflakeToDate(id) {
+  try {
+    const ms = (BigInt(id) >> 22n) + DISCORD_EPOCH;
+    return new Date(Number(ms));
+  } catch { return null; }
+}
+
+function accountAgeYears(userId) {
+  const created = snowflakeToDate(userId);
+  if (!created) return 0;
+  return (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+}
+
+function formatAccountAge(userId) {
+  const created = snowflakeToDate(userId);
+  if (!created) return '—';
+  const ms = Date.now() - created.getTime();
+  const days = Math.floor(ms / 86400000);
+  if (days < 30) return `${days}d`;
+  const months = Math.floor(days / 30.44);
+  if (months < 12) return `${months}mo`;
+  const years = (days / 365.25).toFixed(1);
+  return `${years}yr`;
+}
+
+// ═══════════════════════════════════════════════════
+//  TOAST NOTIFICATIONS
+// ═══════════════════════════════════════════════════
+function showToast(icon, title, sub, wump) {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast' + (wump ? ' reward' : '');
+  t.innerHTML = `
+    <div class="toast-icon">${icon}</div>
+    <div><div class="toast-title">${title}</div><div class="toast-sub">${sub}</div></div>
+    ${wump ? `<div class="toast-wump">+${wump.toLocaleString()} $WUMP</div>` : ''}
+  `;
+  c.appendChild(t);
+  setTimeout(() => { t.style.transition = 'opacity 0.4s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 3500);
+}
+
+// ═══════════════════════════════════════════════════
+//  AWARD WUMP
+// ═══════════════════════════════════════════════════
+function awardWump(state, taskId, amount, toastIcon, toastTitle) {
+  state.balance += amount;
+  state.tasks_done[taskId] = Date.now();
+  const today = new Date().toDateString();
+  if (state.last_earned_date !== today) { state.earned_today = 0; state.last_earned_date = today; }
+  state.earned_today += amount;
+  saveState(state);
+  showToast(toastIcon || '💰', toastTitle || 'Reward claimed!', `+${amount.toLocaleString()} $WUMP added to your balance`, amount);
+  updateDashboardNumbers(state);
+}
+
+// ═══════════════════════════════════════════════════
+//  AUTO TASKS  (run on each login)
+// ═══════════════════════════════════════════════════
+function runAutoTasks(state) {
+  const user = state.user;
+  const done = state.tasks_done;
+  const age = accountAgeYears(user.id);
+
+  const checks = [
+    { id: 'welcome',        cond: true },
+    { id: 'email_verified', cond: user.verified },
+    { id: 'has_avatar',     cond: !!user.avatar },
+    { id: 'age_1yr',        cond: age >= 1 },
+    { id: 'age_3yr',        cond: age >= 3 },
+    { id: 'age_5yr',        cond: age >= 5 },
+  ];
+
+  let delay = 600;
+  for (const c of checks) {
+    if (c.cond && !done[c.id]) {
+      const task = TASKS.find(t => t.id === c.id);
+      setTimeout(() => { awardWump(state, task.id, task.reward, task.icon, task.name); renderTaskCard(task.id); }, delay);
+      delay += 800;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════
+//  DAILY LOGIN + STREAK
+// ═══════════════════════════════════════════════════
+function checkDailyLogin(state) {
+  const today = new Date().toDateString();
+  const last  = state.last_login_date;
+
+  if (last === today) return; // already claimed today
+
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (last === yesterday) {
+    state.streak = (state.streak || 0) + 1;
+  } else {
+    state.streak = 1; // reset streak
+  }
+  state.last_login_date = today;
+  saveState(state);
+
+  // Grant daily login WUMP
+  const task = TASKS.find(t => t.id === 'daily_login');
+  setTimeout(() => {
+    awardWump(state, '__daily_' + today, task.reward, task.icon, `Day ${state.streak} login!`);
+
+    // Check streak milestones
+    [7, 30].forEach(req => {
+      const st = TASKS.find(t => t.streakReq === req);
+      if (st && state.streak >= req && !state.tasks_done[st.id]) {
+        setTimeout(() => { awardWump(state, st.id, st.reward, st.icon, st.name); renderTaskCard(st.id); }, 900);
+      }
+    });
+  }, 300);
+}
+
+// ═══════════════════════════════════════════════════
+//  DISCORD LOGIN
+// ═══════════════════════════════════════════════════
+function startDiscordLogin(e) {
+  if (e) e.preventDefault();
+  window.location.href = DISCORD_OAUTH_URL;
+}
+
+async function handleOAuthCallback(code) {
+  showLoading('Connecting your Discord…');
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+    if (!resp.ok) throw new Error(`Worker returned ${resp.status}`);
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+
+    // data = { access_token, user: { id, username, discriminator, avatar, verified, email } }
+    let state = getState();
+    state.user = data.user;
+    state.access_token = data.access_token;
+    saveState(state);
+
+    hideLoading();
+    window.history.replaceState({}, '', window.location.pathname);
+    initDashboard(state, true);
+  } catch (err) {
+    hideLoading();
+    console.error('OAuth error:', err);
+    showToast('❌', 'Login failed', err.message || 'Could not connect Discord. Check the Worker URL.', null);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+//  LOGOUT
+// ═══════════════════════════════════════════════════
+function logout() {
+  if (!confirm('Disconnect Discord? Your $WUMP balance will be saved locally.')) return;
+  const state = getState();
+  state.user = null;
+  state.access_token = null;
+  saveState(state);
+  hideDashboard();
+  showToast('👋', 'Disconnected', 'Your balance is safely stored locally.', null);
+}
+
+// ═══════════════════════════════════════════════════
+//  DASHBOARD RENDER
+// ═══════════════════════════════════════════════════
+function avatarURL(user) {
+  if (!user.avatar) return `https://cdn.discordapp.com/embed/avatars/${(BigInt(user.id) >> 22n) % 6n}.png`;
+  const ext = user.avatar.startsWith('a_') ? 'gif' : 'png';
+  return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=128`;
+}
+
+function initDashboard(state, isNew = false) {
+  const { user } = state;
+  if (!user) return;
+
+  const avURL = avatarURL(user);
+
+  // Navbar
+  document.getElementById('nav-login-li').style.display = 'none';
+  document.getElementById('nav-user-li').style.display = '';
+  document.getElementById('nav-avatar').src = avURL;
+  document.getElementById('nav-username').textContent = user.global_name || user.username;
+
+  // Dashboard header
+  document.getElementById('dash-avatar').src = avURL;
+  document.getElementById('dash-username').textContent = user.global_name || user.username;
+  document.getElementById('dash-tag').textContent = user.discriminator && user.discriminator !== '0'
+    ? `@${user.username} · #${user.discriminator}`
+    : `@${user.username}`;
+  document.getElementById('stat-account-age').textContent = formatAccountAge(user.id);
+
+  updateDashboardNumbers(state);
+  renderAllTasks(state);
+
+  document.getElementById('dashboard').classList.add('show');
+  document.getElementById('dash-divider').classList.add('show');
+
+  if (isNew) {
+    checkDailyLogin(state);
+    runAutoTasks(state);
+  }
+}
+
+function updateDashboardNumbers(state) {
+  document.getElementById('dash-balance').textContent = state.balance.toLocaleString();
+  document.getElementById('stat-streak').textContent = state.streak || 0;
+  const today = new Date().toDateString();
+  document.getElementById('stat-earned-today').textContent =
+    (state.last_earned_date === today ? state.earned_today : 0).toLocaleString();
+  const tasksDone = TASKS.filter(t => state.tasks_done[t.id]).length;
+  document.getElementById('stat-tasks-done').textContent = tasksDone;
+  document.getElementById('task-count-label').textContent = `${tasksDone} / ${TASKS.length} completed`;
+}
+
+function renderAllTasks(state) {
+  const grid = document.getElementById('tasks-grid');
+  grid.innerHTML = '';
+  TASKS.forEach(task => {
+    grid.appendChild(buildTaskEl(task, state));
+  });
+}
+
+function buildTaskEl(task, state) {
+  state = state || getState();
+  const done = isDone(task, state);
+  const div = document.createElement('div');
+  div.className = 'task-card' + (done ? ' done' : '');
+  div.id = 'task-' + task.id;
+
+  let btnHTML;
+  if (done) {
+    btnHTML = `<button class="task-claim done-btn" disabled>✓ Done</button>`;
+  } else if (task.daily) {
+    const today = new Date().toDateString();
+    const claimedToday = Object.keys(state.tasks_done).some(k => k === '__daily_' + today);
+    btnHTML = claimedToday
+      ? `<button class="task-claim done-btn" disabled>✓ Claimed</button>`
+      : `<button class="task-claim" onclick="claimManualTask('${task.id}')">Claim</button>`;
+  } else if (task.manual) {
+    btnHTML = `<button class="task-claim" onclick="claimManualTask('${task.id}')">Claim</button>`;
+  } else {
+    btnHTML = `<button class="task-claim" disabled style="opacity:0.4;cursor:default">Auto</button>`;
+  }
+
+  div.innerHTML = `
+    <div class="task-icon-wrap">${done ? '✅' : task.icon}</div>
+    <div class="task-info">
+      <div class="task-name">${task.name}</div>
+      <div class="task-desc">${task.desc}</div>
+    </div>
+    <div class="task-right">
+      <div class="task-reward">${done ? '✓' : '+'}${task.reward.toLocaleString()} $WUMP</div>
+      ${btnHTML}
+    </div>
+  `;
+  return div;
+}
+
+function renderTaskCard(taskId) {
+  const state = getState();
+  const task = TASKS.find(t => t.id === taskId);
+  const old = document.getElementById('task-' + taskId);
+  if (old && task) old.replaceWith(buildTaskEl(task, state));
+  updateDashboardNumbers(state);
+}
+
+function isDone(task, state) {
+  if (task.daily) return false; // daily is never permanently done
+  return !!state.tasks_done[task.id];
+}
+
+function claimManualTask(taskId) {
+  const state = getState();
+  const task = TASKS.find(t => t.id === taskId);
+  if (!task) return;
+
+  // For manual tasks, optionally open their link first
+  if (task.link && !state.tasks_done[task.id]) {
+    window.open(task.link, '_blank');
+  }
+
+  if (task.daily) {
+    const today = new Date().toDateString();
+    if (Object.keys(state.tasks_done).some(k => k === '__daily_' + today)) {
+      showToast('⏰', 'Already claimed', 'Come back tomorrow for your next daily login reward!', null);
+      return;
+    }
+    awardWump(state, '__daily_' + today, task.reward, task.icon, `Daily Login — Day ${state.streak}`);
+    renderTaskCard(taskId);
+    return;
+  }
+
+  if (state.tasks_done[taskId]) {
+    showToast('⏰', 'Already done', 'You\'ve already claimed this task!', null);
+    return;
+  }
+
+  awardWump(state, taskId, task.reward, task.icon, task.name);
+  renderTaskCard(taskId);
+}
+
+// ═══════════════════════════════════════════════════
+//  UI HELPERS
+// ═══════════════════════════════════════════════════
+function showLoading(msg) {
+  document.getElementById('auth-loading-text').textContent = msg || 'Loading…';
+  document.getElementById('auth-loading').classList.add('show');
+}
+function hideLoading() {
+  document.getElementById('auth-loading').classList.remove('show');
+}
+function hideDashboard() {
+  document.getElementById('dashboard').classList.remove('show');
+  document.getElementById('dash-divider').classList.remove('show');
+  document.getElementById('nav-login-li').style.display = '';
+  document.getElementById('nav-user-li').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════
+//  TICKER
+// ═══════════════════════════════════════════════════
+const tickerData = [
+  { label: '$WUMP/USD', price: '$0.0001', change: '+2.1%', up: true },
+  { label: '$WUMP/ETH', price: '0.000000033 ETH', change: '+1.8%', up: true },
+  { label: 'Holders', price: '2', change: '+2 today', up: true },
+  { label: '24h Volume', price: '$0.12', change: 'just launched', up: true },
+  { label: 'Streak Leaders', price: 'Jane Doe · 1 day', change: '🔥', up: true },
+  { label: 'New Earners', price: '2 total', change: 'be #3!', up: true },
+  { label: '$WUMP burned', price: '0', change: 'all time', up: false },
+];
+
+const track = document.getElementById('ticker');
+[...tickerData, ...tickerData].forEach(item => {
+  const el = document.createElement('div');
+  el.className = 'ticker-item';
+  el.innerHTML = `<span class="dot">◆</span> <strong>${item.label}</strong> ${item.price} <span class="${item.up ? 'up' : 'down'}">${item.change}</span>`;
+  track.appendChild(el);
+});
+
+// Card hover glow
+document.querySelectorAll('.earn-card, .tier-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x', ((e.clientX - rect.left) / rect.width * 100) + '%');
+    card.style.setProperty('--mouse-y', ((e.clientY - rect.top) / rect.height * 100) + '%');
+  });
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id === '#') return;
+    const el = document.querySelector(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+
+// Intersection fade
+const io = new IntersectionObserver(entries => entries.forEach(en => {
+  if (en.isIntersecting) en.target.style.animation = 'fadeUp 0.5s ease both';
+}));
+document.querySelectorAll('.stat-value').forEach(el => io.observe(el));
+
+// ═══════════════════════════════════════════════════
+//  INIT ON PAGE LOAD
+// ═══════════════════════════════════════════════════
+(function init() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+
+  if (code) {
+    // Coming back from Discord OAuth
+    handleOAuthCallback(code);
+    return;
+  }
+
+  // Check if already logged in
+  const state = getState();
+  if (state.user) {
+    initDashboard(state, true);
+  }
+})();
+</script>
+</body>
+</html>
