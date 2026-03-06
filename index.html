@@ -1400,7 +1400,7 @@
   <p class="footer-tagline">The currency of Discord culture.</p>
   <div class="footer-links">
     <a href="#">Whitepaper</a>
-    <a href="#">Discord Server</a>
+    <a href="">Discord Server</a>
     <a href="#">CoinGecko</a>
     <a href="#">DEX Trade</a>
     <a href="#">Twitter / X</a>
@@ -1630,13 +1630,13 @@ async function handleOAuthCallback(code) {
 //  LOGOUT
 // ═══════════════════════════════════════════════════
 function logout() {
-  if (!confirm('Disconnect Discord? Your $WUMP balance will be saved locally.')) return;
+  if (!confirm('Disconnect Discord?')) return;
   const state = getState();
   state.user = null;
   state.access_token = null;
   saveState(state);
   hideDashboard();
-  showToast('👋', 'Disconnected', 'Your balance is safely stored locally.', null);
+  showToast('👋', 'Disconnected', 'Sad to see you go!', null);
 }
 
 // ═══════════════════════════════════════════════════
